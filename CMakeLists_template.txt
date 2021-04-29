@@ -1,7 +1,9 @@
 #${templateWarning}
 
 # Use ninja
-# set(CMAKE_MAKE_PROGRAM ninja CACHE STRING "Use ninja")
+if(WIN32)
+    set(CMAKE_MAKE_PROGRAM "${CMAKE_SOURCE_DIR}/thirdParty/ninjaForWindows/ninja.exe" CACHE STRING "Use ninja")
+endif()
 
 set(CMAKE_SYSTEM_NAME Generic)
 
@@ -24,7 +26,7 @@ set(CMAKE_C_STANDARD 11)
 #Uncomment for hardware floating point
 add_compile_definitions(ARM_MATH_CM4;ARM_MATH_MATRIX_CHECK;ARM_MATH_ROUNDING)
 add_compile_options(-mfloat-abi=hard -mfpu=fpv4-sp-d16)
-#add_link_options(-mfloat-abi=hard -mfpu=fpv4-sp-d16)
+add_link_options(-mfloat-abi=hard -mfpu=fpv4-sp-d16)
 
 #Uncomment for software floating point
 #add_compile_options(-mfloat-abi=soft)
@@ -37,6 +39,8 @@ add_compile_options(-specs=nano.specs -specs=nosys.specs)
 # uncomment to mitigate c++17 absolute addresses warnings
 set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} -Wno-register")
 
+
+# Optimization level for different compile options##############################
 if ("$${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     message(STATUS "O2 optimization for release build")
     add_compile_options(-O2 -flto)
@@ -50,12 +54,39 @@ else ()
     message(STATUS "Minimal optimization, debug info included")
     add_compile_options(-Og -ggdb -flto)
 endif ()
+# End of optimization level for different compile options#######################
+
+
+# Include threadx library#######################################################
+set(THREADX_ROOT ${CMAKE_SOURCE_DIR}/thirdParty/threadx)
+set(THREADX_ARCH "cortex_m4")
+set(THREADX_TOOLCHAIN "gnu")
+
+add_subdirectory(${THREADX_ROOT})
+target_link_libraries(threadx)
+
+include_directories(
+        ${THREADX_ROOT}/common/inc
+        ${THREADX_ROOT}/ports/${THREADX_ARCH}/${THREADX_TOOLCHAIN}/inc
+)
+# End of include threadx library################################################
+
+
+# Definitions used by ThreadX###################################################
+add_compile_definitions(TX_ENABLE_FPU_SUPPORT=1)
+# End of definitions used by ThreadX############################################
+
 
 include_directories(${includes})
 
 add_definitions(${defines})
 
-file(GLOB_RECURSE SOURCES ${sources})
+file(GLOB_RECURSE SOURCES
+        ${sources}
+        "${THREADX_ROOT}/common/*.*"
+        "${THREADX_ROOT}/ports/${THREADX_ARCH}/${THREADX_TOOLCHAIN}/src/*.*"
+        "${CMAKE_SOURCE_DIR}/User/*.*"
+)
 
 set(LINKER_SCRIPT $${CMAKE_SOURCE_DIR}/${linkerScript})
 
@@ -66,13 +97,6 @@ add_link_options(-T $${LINKER_SCRIPT})
 
 add_executable($${PROJECT_NAME}.elf $${SOURCES} $${LINKER_SCRIPT})
 
-# Include threadx library#######################################################
-set(THREADX_ARCH "cortex_m4")
-set(THREADX_TOOLCHAIN "gnu")
-
-add_subdirectory(${PROJECT_SOURCE_DIR}/thirdParty/threadx)
-target_link_libraries(threadx)
-# End of include threadx library################################################
 
 set(HEX_FILE $${PROJECT_BINARY_DIR}/$${PROJECT_NAME}.hex)
 set(BIN_FILE $${PROJECT_BINARY_DIR}/$${PROJECT_NAME}.bin)
