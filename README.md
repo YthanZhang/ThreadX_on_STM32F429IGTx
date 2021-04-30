@@ -33,7 +33,7 @@ The project is configured to run on a custom STM32F429IGTx board. To make it run
    
 2) remove folder `Core` `Drivers`.
    
-3) generate new files using STM32CubeMX with the appropriate configuration. Remember to select the "generate under root" option under the Project Manager tag.
+3) generate new files using STM32CubeMX with the appropriate configuration. Remember to select the "generate under root" option under the Project Manager tab.
    
 4) modify `CMakeLists.txt`:
    1) change `STM32F429xx` in line `86`: `add_definitions(-DUSE_HAL_DRIVER -DDEBUG -DSTM32F429xx)` to the chip name of the current device.
