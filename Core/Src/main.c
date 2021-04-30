@@ -69,15 +69,14 @@ int main(void)
 
     /* USER CODE END 1 */
 
-    /* MCU
-     * Configuration--------------------------------------------------------*/
+    /* MCU Configuration------------------------------------------------------*/
 
     /* Reset of all peripherals, Initializes the Flash interface and the
      * Systick. */
     HAL_Init();
 
     /* USER CODE BEGIN Init */
-
+    HAL_RCC_DeInit();
     /* USER CODE END Init */
 
     /* Configure the system clock */
@@ -91,20 +90,22 @@ int main(void)
     MX_GPIO_Init();
     /* USER CODE BEGIN 2 */
 
-    HAL_SuspendTick();
-
-    /// Start ThreadX RTOS, do not use infinite loop
+    // Start ThreadX RTOS, do not use infinite loop
     _tx_initialize_kernel_enter();
 
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    /// while loop have been removed
+
+    // while loop have been removed****************
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    /// while loop have been removed
+
+    // while loop have been removed****************
+
     /* USER CODE END 3 */
 }
 
@@ -149,41 +150,12 @@ void SystemClock_Config(void)
     {
         Error_Handler();
     }
+    /** Enables the Clock Security System
+     */
+    HAL_RCC_EnableCSS();
 }
 
 /* USER CODE BEGIN 4 */
-unsigned long my_thread_counter = 0;
-TX_THREAD my_thread;
-
-void my_thread_entry(ULONG thread_input)
-{
-    /* Enter into a forever loop. */
-    while (1)
-    {
-        /* Increment thread counter. */
-        my_thread_counter++;
-
-        HAL_GPIO_WritePin(LED0_GPIO_Port, LED0_Pin, GPIO_PIN_RESET);
-        /* Sleep for 5000 tick, 500ms */
-        tx_thread_sleep(5000);
-        
-    }
-}
-
-void tx_application_define(void* first_unused_memory)
-{
-    /* Create my_thread! */
-    tx_thread_create(&my_thread,
-                     "My Thread",
-                     my_thread_entry,
-                     0x1234,
-                     first_unused_memory,
-                     1024,
-                     10,
-                     4,
-                     TX_NO_TIME_SLICE,
-                     TX_AUTO_START);
-}
 /* USER CODE END 4 */
 
 /**

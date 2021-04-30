@@ -21,7 +21,7 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 # project settings
 project(stm32f429CubeThreadXTest C CXX ASM)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 99)
 
 #Uncomment for hardware floating point
 add_compile_definitions(ARM_MATH_CM4;ARM_MATH_MATRIX_CHECK;ARM_MATH_ROUNDING)
@@ -62,6 +62,8 @@ set(THREADX_ROOT ${CMAKE_SOURCE_DIR}/thirdParty/threadx)
 set(THREADX_ARCH "cortex_m4")
 set(THREADX_TOOLCHAIN "gnu")
 
+set(TX_USER_FILE "${CMAKE_SOURCE_DIR}/User/threadXPort/tx_port.h")
+
 add_subdirectory(${THREADX_ROOT})
 target_link_libraries(threadx)
 
@@ -71,13 +73,15 @@ include_directories(
 )
 # End of include threadx library################################################
 
-
 # Definitions used by ThreadX###################################################
 add_compile_definitions(TX_ENABLE_FPU_SUPPORT=1)
 # End of definitions used by ThreadX############################################
 
 
-include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include)
+include_directories(
+        Drivers/CMSIS/Include Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
+        "${CMAKE_SOURCE_DIR}/User/diagnostic"
+)
 
 add_definitions(-DUSE_HAL_DRIVER -DDEBUG -DSTM32F429xx)
 
