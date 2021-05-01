@@ -62,7 +62,7 @@ set(THREADX_ROOT ${CMAKE_SOURCE_DIR}/thirdParty/threadx)
 set(THREADX_ARCH "cortex_m4")
 set(THREADX_TOOLCHAIN "gnu")
 
-set(TX_USER_FILE "${CMAKE_SOURCE_DIR}/User/threadXPort/tx_port.h")
+set(TX_USER_FILE "${CMAKE_SOURCE_DIR}/User/threadXPort/tx_user_custom.h")
 
 add_subdirectory(${THREADX_ROOT})
 target_link_libraries(threadx)
