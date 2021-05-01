@@ -97,13 +97,11 @@
 /* Override various options with default values already assigned in tx_port.h.
    Please also refer to tx_port.h for descriptions on each of these options.  */
 
-/*
-#define TX_MAX_PRIORITIES                       32
-#define TX_MINIMUM_STACK                        ????
-#define TX_THREAD_USER_EXTENSION                ????
-#define TX_TIMER_THREAD_STACK_SIZE              ????
-#define TX_TIMER_THREAD_PRIORITY                ????
-*/
+#define TX_MAX_PRIORITIES          32
+#define TX_MINIMUM_STACK           128
+#define TX_TIMER_THREAD_STACK_SIZE 256
+#define TX_TIMER_THREAD_PRIORITY   0
+#define TX_THREAD_USER_EXTENSION
 
 /* Determine if there is a FileX pointer in the thread control block.
    By default, the pointer is there for legacy/backwards compatibility.

@@ -17,8 +17,7 @@ TX_THREAD mainThread;
 
 void mainThread_entry(uint32_t arg)
 {
-    /* Start other threads */
-
+    (void)arg;    // getting rid of parameter unused warning.
 
     /* Enter into a forever loop. */
     while (true)

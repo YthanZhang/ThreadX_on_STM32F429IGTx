@@ -29,7 +29,7 @@ void floatComputeThread1(uint32_t arg)
     {
         result *= 0.9f;
         ++floatComputeCompete1_repetitionCounter;
-        tx_thread_sleep(5);
+        tx_thread_sleep(1);
     }
 }
 
@@ -41,7 +41,7 @@ void floatComputeThread2(uint32_t arg)
     {
         result *= 0.9f;
         ++floatComputeCompete2_repetitionCounter;
-        tx_thread_sleep(5);
+        tx_thread_sleep(1);
     }
 }
 
