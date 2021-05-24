@@ -8,11 +8,13 @@
 #include "main.h"
 #include "tx_api.h"
 
+#include "tx_byte_pool.h"
+
 #include "floatCompute.h"
 
 
 TX_BYTE_POOL bytePool0;
-
+const uint32_t bytePool0_size = 1024 * 32;
 
 unsigned long my_thread_counter = 0;
 TX_THREAD mainThread;
