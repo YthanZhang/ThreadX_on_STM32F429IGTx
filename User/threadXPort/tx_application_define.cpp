@@ -6,11 +6,12 @@
 #include "main.h"
 #include "tx_api.h"
 
+#include "tx_byte_pool.hpp"
+
 #include "floatCompute.hpp"
 
 
 TX_BYTE_POOL bytePool0;
-
 
 unsigned long my_thread_counter = 0;
 TX_THREAD mainThread;
@@ -40,7 +41,7 @@ void tx_application_define(void* first_unused_memory)
     tx_byte_pool_create(&bytePool0,
                         (char*)"BytePool0",
                         first_unused_memory,
-                        (1024 * 16));
+                        bytePool0_size);
 
     /* Create mainThread */
     stackSize = 256;
